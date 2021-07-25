@@ -14,6 +14,7 @@ export async function createUser(user) {
 export async function findUSer(email) {
   try {
     const user = await User.findOne({email}).select('+password')
+    console.log(user)
     if(!user) return {error: 'User not found!'}
     return user
   } catch (error) {
@@ -46,10 +47,11 @@ export async function updateUserIfResetToken(id, token, now) {
 
 export async function updateUserIfNewPassword(id, password) {
   try {
-    const {user} = User.findOne(id)
+    const user = await User.findOne({_id: id}).select('+password')
+    if(!user) return {error: 'User not found!'}
     user.password = password
-    console.log(user)
-    return await user.save()
+    await user.save()
+    return {message: 'Password updated'}
   } catch (err) {
     return err
   }

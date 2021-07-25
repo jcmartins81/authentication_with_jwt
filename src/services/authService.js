@@ -62,10 +62,7 @@ export async function resetPassword(email, token, password) {
     const now = new Date()
     if (now > user.passwordResetExpires) return ({error: 'Token expired, try again'})
 
-        //TODO Rever updateUserIfNewPassword
-    if(!await updateUserIfNewPassword(user.id, password)) return ({error: 'Cannot reset password, try again'})
-
-    return ({message: 'Success reset password!'})
+    return await updateUserIfNewPassword(user.id, password)
 
     } catch (error) {
         return ({error})
