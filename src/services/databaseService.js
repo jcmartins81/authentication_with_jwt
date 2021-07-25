@@ -20,3 +20,37 @@ export async function findUSer(email) {
     return error
   }
 }
+
+export async function findUSerWithResetToken(email) {
+  try {
+    const user = await User.findOne({email}).select('+passwordResetToken passwordResetExpires')
+    if(!user) return {error: 'User not found!'}
+    return user
+  } catch (error) {
+    return error
+  }
+}
+
+export async function updateUserIfResetToken(id, token, now) {
+  try {
+    return await User.findByIdAndUpdate(id, {
+      $set: {
+        passwordResetToken: token,
+        passwordResetExpires: now
+      }
+    })
+  } catch (err) {
+    return err
+  }
+}
+
+export async function updateUserIfNewPassword(id, password) {
+  try {
+    const {user} = User.findOne(id)
+    user.password = password
+    console.log(user)
+    return await user.save()
+  } catch (err) {
+    return err
+  }
+}

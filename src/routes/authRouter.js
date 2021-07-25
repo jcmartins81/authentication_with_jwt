@@ -1,6 +1,6 @@
 import express from 'express'
 import { createUser } from '../services/databaseService.js'
-import {authenticate} from '../services/authService.js'
+import {authenticate, forgotPassword, resetPassword} from '../services/authService.js'
 
 const authRouter = express.Router()
 
@@ -20,4 +20,25 @@ authRouter.post('/authenticate', async (req, res) => {
     res.send(result)
 })
 
+authRouter.post('/forgot_password', async (req, res) => {
+    try {
+        const {email} = req.body
+        const result = await forgotPassword(email)
+        if(result.error) return res.status(400).send(result.error)
+        return res.send(result.message)
+    } catch (err) {
+        res.status(400).send({error: 'Error on forgot password, try again!' })
+    }
+})
+
+authRouter.post('/reset_password', async (req, res) => {
+    try {
+        const {email ,token, password} = req.body
+        const result = await resetPassword(email, token, password)
+        if(result.error) return res.status(400).send(result.error)
+        res.send(result.message)
+    } catch (error) {
+        res.status(400).send({error: 'Cannot reset password try again!'})
+    }
+})
 export default authRouter
