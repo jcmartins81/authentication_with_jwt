@@ -1,4 +1,5 @@
 import User from "../database/models/user.js";
+import Project from '../database/models/project.js'
 
 export async function createUser(user) {
   try {
@@ -54,5 +55,26 @@ export async function updateUserIfNewPassword(id, password) {
     return {message: 'Password updated'}
   } catch (err) {
     return err
+  }
+}
+
+export async function createProject(data) {
+  try {
+    const project = await Project.create(data)
+    if(!project) return {error: 'Error creating project'}
+
+    return project
+  } catch (error) {
+    return {error}
+  }
+}
+
+export async function getProjects() {
+  try {
+    const projects = await Project.find()
+
+    return projects
+  } catch (error) {
+    return {error: 'Error loading projects'}
   }
 }
