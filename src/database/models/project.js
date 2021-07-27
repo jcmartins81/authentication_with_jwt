@@ -1,35 +1,37 @@
-import database from "../index.js";
-import {join, resolve} from "path";
-import dotenv from "dotenv";
+import { join, resolve } from 'path'
+import dotenv from 'dotenv'
+import database from '../index.js'
 
 dotenv.config({
-    path: join(resolve(), "./src/config/.env"),
-});
+  path: join(resolve(), './src/config/.env'),
+})
 
 const projectSchema = new database.Schema({
-    title: {
-        type: String,
-        required: true,
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  user: {
+    type: database.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  tasks: [
+    {
+      type: database.Schema.Types.ObjectId,
+      ref: 'Task',
     },
-    description: {
-        type: String,
-        required: true
-    },
-    user: {
-        type: database.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    tasks: [{
-        type: database.Schema.Types.ObjectId,
-        ref: 'Task',
-    }],
-    createdAt: {
-        type: Date,
-        default: Date.now(),
-    },
-});
+  ],
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+})
 
-const Project = database.model("Project", projectSchema);
+const Project = database.model('Project', projectSchema)
 
-export default Project;
+export default Project

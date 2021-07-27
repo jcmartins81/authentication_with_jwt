@@ -1,11 +1,11 @@
-import bcrypt from "bcryptjs";
-import database from "../index.js";
-import {join, resolve} from "path";
-import dotenv from "dotenv";
+import bcrypt from 'bcryptjs'
+import { join, resolve } from 'path'
+import dotenv from 'dotenv'
+import database from '../index.js'
 
 dotenv.config({
-  path: join(resolve(), "./src/config/.env"),
-});
+  path: join(resolve(), './src/config/.env'),
+})
 
 const userSchema = new database.Schema({
   name: {
@@ -40,14 +40,14 @@ const userSchema = new database.Schema({
     type: Date,
     default: Date.now(),
   },
-});
+})
 
-userSchema.pre("save", async function (next) {
-  this.password = await bcrypt.hash(this.password, Number(process.env.ROUNDS));
+userSchema.pre('save', async function (next) {
+  this.password = await bcrypt.hash(this.password, Number(process.env.ROUNDS))
 
   next()
-});
+})
 
-const User = database.model("User", userSchema);
+const User = database.model('User', userSchema)
 
-export default User;
+export default User
