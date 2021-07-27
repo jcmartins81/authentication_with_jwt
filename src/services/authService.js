@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import dotenv from 'dotenv'
 import { join, resolve } from 'path'
 import crypto from 'crypto'
-import { generateToken } from '../utils/token.js'
+import generateToken from '../utils/token.js'
 import {
   findUSer,
   findUSerWithResetToken,
@@ -26,7 +26,10 @@ export async function authenticate(email, password) {
 
     user.password = ''
 
-    return { user, token: await generateToken({ id: user.id }) }
+    return {
+      user,
+      token: await generateToken({ id: user.id }),
+    }
   } catch (error) {
     return error
   }

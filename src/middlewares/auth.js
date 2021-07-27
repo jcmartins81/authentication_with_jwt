@@ -6,23 +6,26 @@ dotenv.config({
   path: join(resolve(), './src/config/.env'),
 })
 
+function extractToken(data) {
+  const token = data || ''
+  return token.replace('Bearer ', '')
+}
+
 export default (req, res, next) => {
-  const authHeader = req.headers.authorization
+  const token = extractToken(req.headers.authorization)
 
-  if (!authHeader) return res.status(401).send({ error: 'No token provided' })
+  jwt.verify(
+    token,
+    process.env.JWT_PUBLIC_KEY,
+    {
+      algorithm: 'RS256',
+    },
+    (err, decoded) => {
+      if (err) return res.status(401).send({ error: 'Token invalid' })
 
-  const parts = authHeader.split(' ')
-  if (!parts.length === 2) return res.status(401).send({ error: 'Token error' })
+      req.userId = decoded.id
 
-  const [scheme, token] = parts
-  if (!/^Bearer$/i.test(scheme))
-    return res.status(401).send({ error: 'Token malformed' })
-
-  jwt.verify(token, process.env.SECRET, (err, decoded) => {
-    if (err) return res.status(401).send({ error: 'Token invalid' })
-
-    req.userId = decoded.id
-
-    return next()
-  })
+      return next()
+    }
+  )
 }

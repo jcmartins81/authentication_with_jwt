@@ -32,6 +32,10 @@ const userSchema = new database.Schema({
     type: Date,
     select: false,
   },
+  role: {
+    type: String,
+    default: 'user',
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

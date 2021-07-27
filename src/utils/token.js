@@ -1,7 +1,8 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken'
 
-export function generateToken(params = {}) {
-    return jwt.sign(params, process.env.SECRET, {
-        expiresIn: 8600
-    } )
+export default function generateToken(params = {}) {
+  return jwt.sign(params, process.env.JWT_PRIVATE_KEY, {
+    expiresIn: '15m',
+    algorithm: 'RS256',
+  })
 }

@@ -2,10 +2,16 @@ import User from '../database/models/user.js'
 import Project from '../database/models/project.js'
 import Task from '../database/models/task.js'
 
-export async function createUser(user) {
+export async function createUser(user, id) {
   try {
+    const adminUser = await User.findOne({ _id: id })
+
+    if (adminUser.role !== 'admin')
+      return { error: 'User not authorized to register users' }
+
     if (await User.findOne({ email: user.email }))
       return { error: 'User already exists!' }
+
     const newUser = await User.create(user)
     newUser.password = ''
     return newUser

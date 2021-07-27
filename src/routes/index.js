@@ -1,7 +1,7 @@
 import express from 'express'
 import authRouter from './authRouter.js'
-import projectRouter from "./projectRouter.js";
-import auth from "../middlewares/auth.js";
+import projectRouter from './projectRouter.js'
+import auth from '../middlewares/auth.js'
 
 const router = express.Router()
 

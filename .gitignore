@@ -4,3 +4,5 @@ src/config/.env
 containers/mongo-volume
 
 node_modules
+
+*.pem
